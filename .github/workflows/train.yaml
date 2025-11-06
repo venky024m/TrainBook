@@ -1,4 +1,4 @@
-name: CI/CD TrainBook Deployment to Multiple Environments
+name: CI/CD TrainBook Deployment
 
 on:
   push:
@@ -29,26 +29,8 @@ jobs:
       - name: Package with Maven
         run: mvn package
 
-      - name: Deploy to Dev
+      - name: Deploy to server
         run: |
           curl -v --fail -u "${{ secrets.TOMCAT_DEV_USER }}:${{ secrets.TOMCAT_DEV_PASSWORD }}" \
           -T target/TrainBook-1.0.0-SNAPSHOT.war \
           "http://${{ secrets.TOMCAT_DEV_HOST }}/manager/text/deploy?path=/TrainBook&update=true"
-
-      - name: Deploy to Test
-        run: |
-          curl -v --fail -u "${{ secrets.TOMCAT_TEST_USER }}:${{ secrets.TOMCAT_TEST_PASSWORD }}" \
-          -T target/TrainBook-1.0.0-SNAPSHOT.war \
-          "http://${{ secrets.TOMCAT_TEST_HOST }}/manager/text/deploy?path=/TrainBook&update=true"
-
-      - name: Deploy to Pre-Prod
-        run: |
-          curl -v --fail -u "${{ secrets.TOMCAT_PREPROD_USER }}:${{ secrets.TOMCAT_PREPROD_PASSWORD }}" \
-          -T target/TrainBook-1.0.0-SNAPSHOT.war \
-          "http://${{ secrets.TOMCAT_PREPROD_HOST }}/manager/text/deploy?path=/TrainBook&update=true"
-
-      - name: Deploy to Prod
-        run: |
-          curl -v --fail -u "${{ secrets.TOMCAT_PROD_USER }}:${{ secrets.TOMCAT_PROD_PASSWORD }}" \
-          -T target/TrainBook-1.0.0-SNAPSHOT.war \
-          "http://${{ secrets.TOMCAT_PROD_HOST }}/manager/text/deploy?path=/TrainBook&update=true"
