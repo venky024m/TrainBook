@@ -21,11 +21,22 @@ jobs:
          run: mvn test
        - name: maven package
          run: mvn package
-               # deploy to tomcat
-        # deploy to tomcat
-       - name : Deploy to Tomcat
-         run: |
-          curl -v -u ${{ secrets.TOMCAT_USER }}:${{ secrets.TOMCAT_PASSWORD }} \
-            -T target/TrainBook-1.0.0-SNAPSHOT.war \
-          "http://${{ secrets.TOMCAT_HOST }}:8080/manager/text/deploy?path=/TrainBook-1.0.0-SNAPSHOT.war&update=true"
 
+              # deploy to tomcat
+       
+       - name: 7. Deploy to Tomcat with curl
+         run: |
+           # Use curl to upload the WAR file. This is more reliable than the old Maven plugin.
+           # We find the WAR file in the target/ directory
+           WAR_FILE=$(find target -name "*.war" | head -n 1)
+        
+           echo "Deploying $WAR_FILE to Tomcat..."
+
+           # The TOMCAT_URL secret is 'http://<ip>:8080/manager/text'
+           # This command uploads the file to the deploy endpoint.
+           curl -v -u "${{ secrets.TOMCAT_USERNAME }}:${{ secrets.TOMCAT_PASSWORD }}" \
+             -T "$WAR_FILE" \
+             "${{ secrets.TOMCAT_URL }}/deploy?path=/train-ticket&update=true"
+
+
+             
