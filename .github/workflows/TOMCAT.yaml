@@ -31,6 +31,17 @@ jobs:
         with:
           name: war-file
           path: ${{ env.WAR_FILE }}
+      - name: 🗂 Find WAR file
+        run: echo "WAR_FILE=$(ls target/*.war | head -n 1)" >> $GITHUB_ENV
+
+
+      - name: SonarQube Analysis
+        run: |
+         mvn sonar:sonar \
+         -Dsonar.projectKey=train-ticket-reservation \
+         -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+         -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+    
 
       
   deploy-dev:
@@ -57,6 +68,9 @@ jobs:
           echo "📌 Deploying WAR file..."
           curl -v -u "$USER:$PASS" --fail --show-error -T "$WAR_FILE" \
             "$URL/deploy?path=/train-ticket-reservation&update=true"
+
+
+            
 
             
 
