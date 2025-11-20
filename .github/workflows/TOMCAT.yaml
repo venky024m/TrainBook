@@ -34,9 +34,9 @@ jobs:
 
            # The TOMCAT_URL secret is 'http://<ip>:8080/manager/text'
            # This command uploads the file to the deploy endpoint.
-           curl -v -u "${{ secrets.TOMCAT_USERNAME }}:${{ secrets.TOMCAT_PASSWORD }}" \
-             -T "$WAR_FILE" \
-             "${{ secrets.TOMCAT_URL }}/deploy?path=/train-ticket&update=true"
+           curl -u <username>:<password> \
+            -T target/TrainBook-1.0.0-SNAPSHOT.war \
+             "http://<tomcat-host>:8080<port>/manager/text/deploy?path=/TrainBook&update=true"
 
 
              
