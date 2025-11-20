@@ -33,6 +33,7 @@ jobs:
           path: ${{ env.WAR_FILE }}
       - name: 🗂 Find WAR file
         run: echo "WAR_FILE=$(ls target/*.war | head -n 1)" >> $GITHUB_ENV
+        
 
 
       - name: SonarQube Analysis
